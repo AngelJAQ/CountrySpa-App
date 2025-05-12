@@ -7,6 +7,7 @@ const routes: Routes = [
   { path: 'usuarios', loadChildren: () => import('./screens/usuarios-screen/usuarios-screen.module').then(m => m.UsuariosScreenModule) },
 ];
 
+
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
