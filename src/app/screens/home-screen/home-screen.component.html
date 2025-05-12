@@ -1,0 +1,43 @@
+<h1 class="text-4xl font-bold text-center text-blue-600">
+  ¡Hola Tailwind con Angular y SCSS!
+</h1>
+<button class="btn btn-primary">Botón DaisyUI</button>
+<div class="min-h-screen bg-base-200 p-6 space-y-10">
+  <!-- Título -->
+  <h1 class="text-4xl font-bold text-center text-primary">Bienvenido a DaisyUI</h1>
+
+  <!-- Botones -->
+  <div class="flex justify-center gap-4">
+    <button class="btn btn-primary">Primario</button>
+    <button class="btn btn-secondary">Secundario</button>
+    <button class="btn btn-accent">Acento</button>
+  </div>
+
+  <!-- Card -->
+  <div class="card w-96 bg-base-100 shadow-xl mx-auto">
+    <figure><img src="https://placeimg.com/400/225/tech" alt="Tech" /></figure>
+    <div class="card-body">
+      <h2 class="card-title">Componente Card</h2>
+      <p>Este es un ejemplo de tarjeta usando DaisyUI con Tailwind.</p>
+      <div class="card-actions justify-end">
+        <button class="btn btn-primary">Acción</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="text-center">
+    <button class="btn" onclick="document.getElementById('mi_modal').showModal()">Abrir Modal</button>
+    <dialog id="mi_modal" class="modal">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg">¡Hola!</h3>
+        <p class="py-4">Este es un modal simple de DaisyUI.</p>
+        <div class="modal-action">
+          <form method="dialog">
+            <button class="btn">Cerrar</button>
+          </form>
+        </div>
+      </div>
+    </dialog>
+  </div>
+</div>
