@@ -1,22 +1,26 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { debounceTime, switchMap, tap, catchError, shareReplay } from 'rxjs/operators';
-import { map } from 'rxjs/operators';
-
+import { debounceTime, switchMap, tap, catchError, shareReplay, map } from 'rxjs/operators';
 
 export interface Usuario {
   id: number;
   nombre: string;
   correo: string;
+  rol: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsuarioService {
-  private apiUrl = 'https://jsonplaceholder.typicode.com/users'; // Simulación
-  private cacheUsuarios: Usuario[] | null = null;
+  private apiUrl = 'https://jsonplaceholder.typicode.com/users';
+
+  private usuariosSimulados: Usuario[] = [
+    { id: 1, nombre: 'Juan Perez', correo: 'juan@example.com', rol: 'estudiante' },
+    { id: 2, nombre: 'Ana López', correo: 'ana@example.com', rol: 'profesor' },
+    { id: 3, nombre: 'Carlos García', correo: 'carlos@example.com', rol: 'administrador' }
+  ];
 
   private filtroSubject = new BehaviorSubject<string>('');
   usuariosFiltrados$: Observable<Usuario[]>;
@@ -25,7 +29,7 @@ export class UsuarioService {
     this.usuariosFiltrados$ = this.filtroSubject.asObservable().pipe(
       debounceTime(300),
       switchMap(filtro => this.getUsuarios(filtro)),
-      shareReplay(1) // cachea el último resultado
+      shareReplay(1)
     );
   }
 
@@ -34,32 +38,30 @@ export class UsuarioService {
   }
 
   getUsuarios(filtro: string = ''): Observable<Usuario[]> {
-    if (this.cacheUsuarios) {
-      const filtrados = this.cacheUsuarios.filter(u =>
-        u.nombre.toLowerCase().includes(filtro.toLowerCase())
-      );
-      return of(filtrados);
-    }
-
-    return this.http.get<Usuario[]>(this.apiUrl).pipe(
-      tap(usuarios => this.cacheUsuarios = usuarios),
-      map(usuarios =>
-        usuarios.filter(u => u.nombre.toLowerCase().includes(filtro.toLowerCase()))
-      ),
-      catchError(err => {
-        console.error('Error al cargar usuarios', err);
-        return of([]);
-      })
-    );
+  const filtrados = this.usuariosSimulados.filter(u =>
+    u.nombre.toLowerCase().includes(filtro.toLowerCase()) ||
+    u.rol.toLowerCase().includes(filtro.toLowerCase())
+  );
+  return of(filtrados);
   }
 
-  getUsuarioPorId(id: number): Observable<Usuario | undefined> {
-    if (this.cacheUsuarios) {
-      return of(this.cacheUsuarios.find(u => u.id === id));
-    }
 
-    return this.http.get<Usuario>(`${this.apiUrl}/${id}`).pipe(
-      catchError(() => of(undefined))
-    );
+  getUsuarioPorId(id: number): Observable<Usuario | undefined> {
+    const encontrado = this.usuariosSimulados.find(u => u.id === id);
+    return of(encontrado);
+  }
+
+  registrarUsuario(usuario: { nombre: string; correo: string; rol: string }): Observable<Usuario> {
+    const nuevoUsuario: Usuario = {
+      id: this.usuariosSimulados.length + 1,
+      nombre: usuario.nombre,
+      correo: usuario.correo,
+      rol: usuario.rol
+    };
+
+    this.usuariosSimulados.push(nuevoUsuario);
+    this.setFiltro(this.filtroSubject.value);
+
+    return of(nuevoUsuario);
   }
 }
