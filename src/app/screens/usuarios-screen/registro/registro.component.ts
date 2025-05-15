@@ -38,7 +38,6 @@ export class RegistroComponent implements OnInit {
 
     const { nombre, correo, rol } = this.registroForm.value;
 
-    // Llamar al servicio para registrar el usuario
     this.usuarioService.registrarUsuario({ nombre, correo, rol })
       .subscribe(
         response => {

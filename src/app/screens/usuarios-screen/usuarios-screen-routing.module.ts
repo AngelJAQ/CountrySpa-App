@@ -12,7 +12,7 @@ const routes: Routes = [
     children: [
       { path: 'lista', component: ListaComponent },
       { path: 'detalle/:id', component: DetalleComponent },
-      { path: 'registro', component: RegistroComponent }, // Nueva ruta
+      { path: 'registro', component: RegistroComponent },
       { path: '', redirectTo: 'lista', pathMatch: 'full' }
     ]
   }
